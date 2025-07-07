@@ -1,1 +1,166 @@
 # Leetcode-Self-made-problems
+
+
+# 🌀 Minimum Rotations to Align Strings
+
+## 💡 Problem Statement
+
+You are given two strings `s1` and `s2` of equal length `n`, consisting of lowercase English letters. You can perform a **rotation operation** on `s1`, which shifts all characters of `s1` to the **left by one position**, and the first character moves to the end.
+
+Your task is to determine the **minimum number of left-rotations** required to transform `s1` into `s2`.  
+If it’s **impossible** to transform `s1` into `s2` using any number of left-rotations, return `-1`.
+
+---
+
+## 📌 Constraints
+
+- `1 <= s1.length == s2.length <= 10^5`
+- `s1` and `s2` consist of only lowercase English letters.
+
+---
+
+## 🧪 Examples
+
+### Example 1:
+```
+
+Input: s1 = "abcde", s2 = "cdeab"
+Output: 2
+Explanation:
+Rotation 1: "abcde" → "bcdea"
+Rotation 2: "bcdea" → "cdeab"
+
+```
+
+### Example 2:
+```
+
+Input: s1 = "hello", s2 = "llohe"
+Output: 2
+
+```
+
+### Example 3:
+```
+
+Input: s1 = "abc", s2 = "cba"
+Output: -1
+Explanation: No sequence of left rotations can match s1 with s2.
+
+```
+
+### Example 4:
+```
+
+Input: s1 = "aaa", s2 = "aaa"
+Output: 0
+Explanation: Already aligned.
+
+````
+
+---
+
+## 🚀 Optimal Approach
+
+To avoid an `O(n²)` brute-force solution, we use a neat trick:
+
+### 🔁 Observation:
+
+If `s2` is a rotation of `s1`, then it must be a **substring of `s1 + s1`**.
+
+Example:  
+`s1 = "abcde"`  
+`s1 + s1 = "abcdeabcde"`  
+`s2 = "cdeab"` is a substring of `s1 + s1`, and its starting index gives the number of rotations needed.
+
+### ✅ Steps:
+1. Check if lengths are equal — if not, return `-1`.
+2. Check if `s1 == s2` — return `0`.
+3. Concatenate `s1` with itself (`s1 + s1`).
+4. Look for `s2` as a substring in `s1 + s1`.
+5. If found, return the **starting index** where it matches — that’s the number of rotations.
+6. If not found, return `-1`.
+
+---
+
+## 🧠 Time & Space Complexity
+
+| Metric       | Value        |
+|--------------|--------------|
+| Time         | O(n)         |
+| Space        | O(n) (for s1 + s1) |
+
+---
+
+## 🧑‍💻 Code
+
+```python
+def minRotations(s1: str, s2: str) -> int:
+    if len(s1) != len(s2):
+        return -1
+
+    if s1 == s2:
+        return 0
+
+    s1_double = s1 + s1
+    n = len(s1)
+
+    for k in range(n):
+        if s1_double[k:k+n] == s2:
+            return k
+
+    return -1
+````
+
+---
+
+## 📣 Motivation
+
+> 💬 *“You don’t learn by solving 500 problems. You learn by solving 250 — and going deep into each.”*
+
+This problem was **originally created** by me to fill a gap in string manipulation challenges.
+It encourages developers to:
+
+* Think about **string rotation beyond equality**
+* Apply **efficient pattern searching**
+* Write optimized solutions under tight constraints
+
+---
+
+## 🌐 Related Concepts & Tags
+
+* String Rotation
+* Pattern Matching
+* Sliding Window
+* Substring Search
+* String Algorithms
+* Two Pointers / KMP (if extended)
+
+---
+
+## 🔗 Connect With Me
+
+Feel free to connect or reach out:
+
+* 💼 [LinkedIn](https://www.linkedin.com/in/sanchit-sharma-1b7a57327/)
+* 🧑‍💻 GitHub: [sanchit955](https://github.com/sanchit955)
+
+---
+
+## 🧠 Want to go deeper?
+
+* Try solving it using **KMP (Knuth-Morris-Pratt)** pattern matching for an advanced take.
+* Analyze time/space optimizations for larger data.
+* Adapt the logic to **right-rotations**, **circular arrays**, or even **string stream matching**.
+
+---
+
+> 🌱 Contributions, stars, and forks are welcome if this helped you in any way.
+> Let's keep building meaningful, educational problems for the developer community.
+
+---
+
+\#HappyCoding 👨‍💻🚀
+
+```
+
