@@ -1,132 +1,98 @@
+🌟 Welcome to my repository of custom LeetCode problems! 🌟  
+This repository is a collection of unique, interview-focused coding challenges I’ve designed to push the boundaries of problem-solving. Each problem is crafted to be engaging, medium-to-hard, and perfect for honing skills needed for technical interviews.  
+📚 Featured Problem: Shortest Path in a Grid with Teleporters  
+
+Shortest Path in a Grid with Teleporters 🗺️✨
 Problem Description
+You’re given a 2D grid of size m x n, where each cell can be:  
 
-You are given a 2D grid of size m x n, where each cell can be:
+'.': An empty cell you can walk through.  
+'#': An obstacle you cannot pass.  
+A letter from 'A' to 'Z': A teleporter. All cells with the same letter are connected, allowing instant movement between them without counting as a move.
 
-
-
-
-
-'.': An empty cell that you can walk through.
-
-
-
-'#': An obstacle that you cannot pass.
-
-
-
-A letter from 'A' to 'Z': A teleporter. All cells with the same letter are connected, meaning you can instantly move from one to any other cell with the same letter without cost.
-
-You start at position (0, 0) and need to reach position (m-1, n-1). You can move to adjacent cells (up, down, left, right) if they are not obstacles, with each such move counting as one move in the path length. Additionally, if you are on a teleporter cell, you can instantly teleport to any other cell with the same letter, and this teleportation does not count toward the path length.
-
-Find the minimum number of moves required to go from (0, 0) to (m-1, n-1). If there is no path, return -1.
-
+Your goal is to find the minimum number of moves to go from (0, 0) to (m-1, n-1). You can move to adjacent cells (up, down, left, right) if they’re not obstacles, with each move counting as one. Teleportation between cells with the same letter is free (zero moves). If no path exists, return -1.  
 Constraints:
 
-
-
-
-
-1 <= m, n <= 100
-
-
-
-The grid contains at least two cells.
-
-
-
-The start and end cells are always '.' or a letter, not '#'.
-
-
-
-There can be multiple teleporters with the same letter.
+1 <= m, n <= 100  
+The grid contains at least two cells.  
+The start (0, 0) and end (m-1, n-1) cells are always '.' or a letter, not '#'.  
+Multiple teleporters can share the same letter.
 
 Examples:
-
 Example 1:
-
-Input:
-
+Input:  
 grid = [
   ['.', 'A', '.'],
   ['.', '#', '.'],
   ['.', 'A', '.']
 ]
 
-Output: 2
-
-Explanation: One possible path is (0,0) -> (0,1) ['A', 1 move] -> teleport to (2,1) ['A', 0 moves] -> (2,2) [1 move]. Total path length is 2 moves.
-
+Output: 2Explanation: One possible path is (0,0) -> (0,1) ['A', 1 move] -> teleport to (2,1) ['A', 0 moves] -> (2,2) [1 move]. Total path length is 2 moves.  
 Example 2:
-
-Input:
-
+Input:  
 grid = [
   ['.', '.', '.'],
   ['.', '#', '.'],
   ['.', '.', '.']
 ]
 
-Output: 4
-
-Explanation: No teleporters are present, so the shortest path is a standard grid traversal, e.g., (0,0) -> (0,1) -> (0,2) -> (1,2) -> (2,2), requiring 4 moves.
-
+Output: 4Explanation: No teleporters, so the shortest path is (0,0) -> (0,1) -> (0,2) -> (1,2) -> (2,2), requiring 4 moves.  
 Example 3:
-
-Input:
-
+Input:  
 grid = [
   ['.', '#', 'A'],
   ['#', '#', '#'],
   ['B', '#', '.']
 ]
 
-Output: -1
-
-Explanation: No path exists from (0,0) to (2,2) due to obstacles.
-
+Output: -1Explanation: No path exists due to obstacles.  
 Example 4:
-
-Input:
-
+Input:  
 grid = [
   ['A', '.'],
   ['.', 'A']
 ]
 
-Output: 0
+Output: 0Explanation: Start at (0,0) ['A'] and teleport to (1,1) ['A'], requiring 0 moves.  
+Example 5:
+Input:  
+grid = [
+  ['A', 'B'],
+  ['B', 'A']
+]
 
-Explanation: Start at (0,0) ['A'] and teleport to (1,1) ['A'], requiring 0 moves.
+Output: 0Explanation: Start at (0,0) ['A'], teleport to (1,1) ['A'], requiring 0 moves.  
+Example 6:
+Input:  
+grid = [
+  ['.', 'B', '.'],
+  ['A', '#', 'A'],
+  ['.', 'B', '.']
+]
 
-Solution
+Output: 2Explanation: Path: (0,0) -> (0,1) ['B', 1 move] -> teleport to (2,1) ['B', 0 moves] -> (2,2) [1 move].  
 
-Approach
+Solution Approach
+This problem is solved using Breadth-First Search (BFS) by modeling the grid as a graph:  
 
-The problem can be solved using Breadth-First Search (BFS) by treating the grid as a graph where each cell is a node, and edges connect adjacent cells as well as cells with the same teleporter letter.
+Nodes: Each cell in the grid.  
+Edges: Connect adjacent cells (up, down, left, right) if not obstacles (cost = 1 move) and connect all cells with the same teleporter letter (cost = 0 moves).
 
+Detailed Steps:
 
+Preprocess Teleporters 🛠️: Create a dictionary mapping each teleporter letter to a list of its cell coordinates.  
+Initialize BFS 🚀: Start with (0, 0) at distance 0 in a queue. Use a set to track visited cells.  
+Explore Neighbors 🔍: For each cell, enqueue unvisited adjacent cells (not obstacles) with distance +1.  
+Handle Teleporters 🚪: If the current cell is a teleporter, enqueue all unvisited cells with the same letter at the same distance.  
+Check Target 🎯: If (m-1, n-1) is reached, return the distance. If the queue empties without reaching the target, return -1.
 
+Complexity Analysis:
 
+Time Complexity: O(m * n * (m * n + T)), where m * n is the grid size and T is the total number of teleporter cells. Each cell can be visited once, and for each teleporter cell, we may explore other teleporter cells with the same letter.  
+Space Complexity: O(m * n) for the queue and visited set, plus O(T) for the teleporter dictionary.
 
-Step 1: Preprocess the grid to group teleporter cells by their letter.
-
-
-
-Step 2: Use a queue for BFS, starting from (0, 0) with distance 0.
-
-
-
-Step 3: For each cell, explore its adjacent cells and, if it's a teleporter, also explore all other cells with the same letter without increasing the distance.
-
-
-
-Step 4: Use a visited set to avoid revisiting cells.
-
-
-
-Step 5: If the target cell is reached, return the distance; otherwise, return -1 if the queue is exhausted.
 
 Solution Code
-
 from collections import deque, defaultdict
 
 def shortestPath(grid):
@@ -134,14 +100,14 @@ def shortestPath(grid):
         return -1
     m, n = len(grid), len(grid[0])
     
-    # Group teleporters by letter
+    # Step 1: Group teleporters by letter
     teleporters = defaultdict(list)
     for i in range(m):
         for j in range(n):
             if grid[i][j].isalpha():
                 teleporters[grid[i][j]].append((i, j))
     
-    # BFS
+    # Step 2: BFS
     queue = deque([(0, 0, 0)])  # (row, col, distance)
     visited = {(0, 0)}
     directions = [(-1, 0), (1, 0), (0, -1), (0, 1)]
@@ -151,14 +117,14 @@ def shortestPath(grid):
         if (row, col) == (m-1, n-1):
             return dist
         
-        # Check adjacent cells
+        # Step 3: Check adjacent cells
         for dr, dc in directions:
             r, c = row + dr, col + dc
             if 0 <= r < m and 0 <= c < n and grid[r][c] != '#' and (r, c) not in visited:
                 visited.add((r, c))
                 queue.append((r, c, dist + 1))
         
-        # Check teleporters
+        # Step 4: Check teleporters
         if grid[row][col].isalpha():
             for r, c in teleporters[grid[row][col]]:
                 if (r, c) not in visited:
@@ -167,104 +133,84 @@ def shortestPath(grid):
     
     return -1
 
+
 Test Cases
+Below are comprehensive test cases to validate the solution:  
 
-Test Case 1
 
 
+Test Case
+Input Grid
+Output
+Explanation
 
 
 
-Input: grid = [['.', 'A', '.'], ['.', '#', '.'], ['.', 'A', '.']]
+1
+grid = [['.', 'A', '.'], ['.', '#', '.'], ['.', 'A', '.']]
+2
+Path: (0,0) -> (0,1) ['A', 1 move] -> teleport to (2,1) ['A', 0 moves] -> (2,2) [1 move].
 
 
+2
+grid = [['.', '.', '.'], ['.', '#', '.'], ['.', '.', '.']]
+4
+Standard shortest path without teleporters: (0,0) -> (0,1) -> (0,2) -> (1,2) -> (2,2).
 
-Output: 2
 
+3
+grid = [['.', '#', 'A'], ['#', '#', '#'], ['B', '#', '.']]
+-1
+No path exists due to obstacles.
 
 
-Explanation: Path: (0,0) -> (0,1) ['A', 1 move] -> teleport to (2,1) ['A', 0 moves] -> (2,2) [1 move].
+4
+grid = [['A', '.'], ['.', 'A']]
+0
+Start at (0,0) ['A'] and teleport to (1,1) ['A'], requiring 0 moves.
 
-Test Case 2
 
+5
+grid = [['A', 'B'], ['B', 'A']]
+0
+Start at (0,0) ['A'], teleport to (1,1) ['A'], requiring 0 moves.
 
 
+6
+grid = [['.', 'B', '.'], ['A', '#', 'A'], ['.', 'B', '.']]
+2
+Path: (0,0) -> (0,1) ['B', 1 move] -> teleport to (2,1) ['B', 0 moves] -> (2,2) [1 move].
 
 
-Input: grid = [['.', '.', '.'], ['.', '#', '.'], ['.', '.', '.']]
 
+Why This Problem? 🤔
+This problem is unique because it combines classic grid traversal with a novel teleporter mechanic, testing your ability to adapt BFS to handle zero-cost transitions. It’s ideal for:  
 
+Interview Prep: Challenges like this are common in technical interviews at companies like Google, Amazon, and Microsoft.  
+Skill Building: Enhances your understanding of graph algorithms and optimization.  
+Creative Thinking: The teleporter feature encourages out-of-the-box solutions.
 
-Output: 4
 
+Related Problems 🔗
+If you enjoyed this problem, check out these related LeetCode problems:  
 
+LeetCode 1091: Shortest Path in Binary Matrix  
+LeetCode 1293: Shortest Path in a Grid with Obstacles Elimination  
+LeetCode 994: Rotting Oranges
 
-Explanation: Standard shortest path without teleporters: (0,0) -> (0,1) -> (0,2) -> (1,2) -> (2,2).
+These problems explore grid traversal but lack the teleporter twist, making this challenge a fresh addition!  
 
-Test Case 3
+Contributing 🤝
+Want to make this repo even better? Here’s how you can contribute:  
 
+Open an Issue: Suggest improvements, report bugs, or propose new test cases.  
+Submit a Pull Request: Add new problems, optimize the solution, or enhance documentation.  
+Share Feedback: Comment on the problem’s difficulty, clarity, or potential variations.
 
+Let’s build a vibrant hub for high-quality coding challenges! 🌟  
 
+License 📄
+This repository is licensed under the MIT License. Feel free to use, share, and modify the content, but please provide credit to the original author.  
 
-
-Input: grid = [['.', '#', 'A'], ['#', '#', '#'], ['B', '#', '.']]
-
-
-
-Output: -1
-
-
-
-Explanation: No path exists due to obstacles.
-
-Test Case 4
-
-
-
-
-
-Input: grid = [['A', '.'], ['.', 'A']]
-
-
-
-Output: 0
-
-
-
-Explanation: Start at (0,0) ['A'] and teleport to (1,1) ['A'], requiring 0 moves.
-
-Test Case 5
-
-
-
-
-
-Input: grid = [['A', 'B'], ['B', 'A']]
-
-
-
-Output: 0
-
-
-
-Explanation: Start at (0,0) ['A'], teleport to (1,1) ['A'], requiring 0 moves.
-
-Test Case 6
-
-
-
-
-
-Input: grid = [['.', 'B', '.'], ['A', '#', 'A'], ['.', 'B', '.']]
-
-
-
-Output: 2
-
-
-
-Explanation: Path: (0,0) -> (0,1) ['B', 1 move] -> teleport to (2,1) ['B', 0 moves] -> (2,2) [1 move].
-
-Contributing
-
-If you have suggestions for improvements or additional test cases, feel free to open an issue or submit a pull request.
+Contact 📧
+Have questions or ideas? Reach out via LinkedIn.
